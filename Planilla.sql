@@ -62,8 +62,59 @@ create table Empleado (
   created_at datetime default current_timestamp,
   updated_at datetime default current_timestamp );
 
+create table Departamentos (
+	iddepartamento int auto_increment primary key,
+    departamento char(50) unique
+);
+create table Provincia(
+	idProvincia int auto_increment primary key,
+    idDepartamento int references Departamentos,
+    provincia char(30) unique
+);
+create table Distrito(
+	idDistrito int auto_increment primary key,
+    idProvincia int references Provincia,
+    distrito char(30) unique
+);
+select * from Distrito;
 /* ----- Insert ----- */
-
+insert Departamentos(departamento)  values 
+	('AMAZONAS'),('ANCASH'),('APURIMAC'),('AREQUIPA'),('AYACUCHO'),('CAJAMARCA'),('CALLAO'),('CUSCO');
+insert Provincia(idDepartamento,provincia) values
+ (1,'BAGUA'),(1,'BONGARA'),(1,'CHACHAPOYAS'),(1,'CONDORCANQUI'),(1,'LUYA'),(1,'RODRIGUEZ DE MENDOZA'),(1,'UTCUBAMBA');
+insert Distrito(idProvincia,distrito) values
+	(1,'ARAMANGO'),(1,'BAGUA'),(1,'COPALLIN'),(1,'EL PARCO'),(1,'IMAZA'),(1,'LA PECA');
+-- ANCASH
+insert Provincia(idDepartamento,provincia) values 
+(2,'AIJA'),(2,'ANTONIO RAYMONDI'),(2,'ASUNCION'),(2,'BOLOGNESI'),(2,'CARHUAZ'),(2,'CARLOS FERMIN FITZCARRALD'),(2,'CASMA'),(2,'CORONGO'),(2,'HUARAZ'),(2,'HUARI'),(2,'HUARMEY'),(2,'HUAYLAS'),(2,'MARISCAL LUZURIAGA'),(2,'OCROS'),(2,'PALLASCA'),(2,'POMOBAMBA'),(2,'RECUAY'),(2,'SANTA'),(2,'SIHUAS'),(2,'YUNGAY');
+insert Distrito(idProvincia,distrito) values
+	(8,'AIJA'),(8,'CORIS'),(8,'HUACLLAN'),(8,'LA MERCED'),(8,'SUCCHA');
+-- APURIMAC
+insert Provincia(idDepartamento,provincia) values (3,'ABANCAY'),(3,'ANDAHUAYLAS'),(3,'ANTABAMBA'),(3,'AYMARAES'),(3,'CHINCHEROS'),(3,'COTABAMBAS'),(3,'GRAU');
+insert Distrito(idProvincia,distrito) values
+	(28,'ABANCAY'),(28,'CHACOCHE'),(28,'CIRCA'),(28,'CURAHUASI'),(28,'HUANIPACA');
+-- AREQUIPA
+insert Provincia(idDepartamento,provincia) values (4,'AREQUIPA'),(4,'CAMANA'),(4,'CARAVELI'),(4,'CASTILLA'),(4,'CAYLLOMA'),(4,'CONDESUYOS'),(4,'ISLAY'),(4,'LA UNION');
+insert Distrito(idProvincia,distrito) values
+	(35,'ALTO SELVA ALEGRE'),(35,'AREQUIPA'),(35,'CAYMA'),(35,'CERRO COLORADO'),(35,'CHARACATO');
+-- AYACUCHO
+insert Provincia(idDepartamento,provincia) values (5,'CANGALLO'),(5,'HUAMANGA'),(5,'HUANCA SANCOS'),(5,'HUANTA'),(5,'LA MAR'),(5,'LUCANAS'),(5,'PARINACOCHAS'),(5,'PAUCAR DEL SARA SARA'),(5,'SUCRE'),(5,'VICTOR FAJARDO'),(5,'VILCAS HUAMAN');
+insert Distrito(idProvincia,distrito) values
+    (43,'CANGALLO'),(43,'CHUSCHI'),(43,'LOS MOROCHUCOS'),(43,'MARIA PARADO DE BELLIDO'),(43,'PARAS');    
+-- CAJAMARCA
+insert Provincia(idDepartamento,provincia) values (6 ,'CAJABAMBA'),(6 ,'CAJAMARCA'),(6 ,'CELENDIN'),(6 ,'CHOTA'),(6 ,'CONTUMAZA'),(6 ,'CUTERVO'),(6 ,'HUALGAYOC'),(6 ,'JAEN'),(6 ,'SAN IGNACIO'),(6 ,'SAN MARCOS'),(6 ,'SAN MIGUEL'),(6 ,'SAN PABLO'),(6 ,'SANTA CRUZ');
+insert Distrito(idProvincia,distrito) values
+	(54,'CACHACHI'),(54,'CAJABAMBA'),(54,'CONDEBAMBA'),(54,'SITACOCHA'),
+	(55,'ASUNCION');
+-- CALLAO
+insert Provincia(idDepartamento,provincia) values (7,'CALLAO');
+insert Distrito(idProvincia,distrito) values
+	(67,'BELLAVISTA'),(67,'CALLAO'),(67,'CARMEN DE LA LEGUA-REYNOSO'),(67,'LA PERLA'),(67,'LA PUNTA');
+-- CUSCO
+insert Provincia(idDepartamento,provincia) values (8,'ACOMAYO'),(8,'ANTA'),(8,'CALCA'),(8,'CANAS'),(8,'CANCHIS'),(8,'CHUMBIVILCAS'),(8,'CUSCO'),(8,'ESPINAR'),(8,'LA CONVENCION'),(8,'PARURO'),(8,'PAUCARTAMBO'),(8,'QUISPICANCHI'),(8,'URUBAMBA');
+insert Distrito(idProvincia,distrito) values
+	(68,'ACOMAYO'),(68,'ACOPIA'),(68,'ACOS'),(68,'MOSOC LLACTA'),(68,'POMACANCHI');
+    
 insert Cargo(Detalle) values ('Administrador'), ('Vendedor'), ('Recepcionista');
 insert Varios(Codigo, Inicial, Detalle) values
 	(1,'','Domicialiado'),
@@ -102,6 +153,16 @@ create procedure sp_getEmpleadoLogin(in _dni char(8), in _passwordd char(6))
 
 create procedure sp_getEmpleado(in _id int)
 	select * from Empleado where id = _id;
+delimiter //   
+create procedure sp_getDepartamentoss(in _inicio int, in _fin int)
+   select * from Departamentos where iddepartamento between _inicio and _fin;
+   //
+create procedure sp_getProvincias(in _idDepartamento int)
+  select idProvincia, provincia from Provincia where idDepartamento = _idDepartamento;
+  
+create procedure sp_getDistritos(in _idProvincia int)
+  select idDistrito, distrito from Distrito where idProvincia = _idProvincia;  
+   ----------------------------------------------------------------------------------------------
 
 delimiter //
 create procedure sp_GuardarCargo( in _id int, in _detalle char(30) )
@@ -140,18 +201,24 @@ create procedure sp_GuardarSede( in _id int, in _razonSocial char(30), in _direc
 
 insert into centrocosto (Detalle) values ('Produccion'),('Ventas');
 insert into sede(RazonSocial,Direccion,idDepartamento,idProvincia,idDistrito) values ('Sede princiapl','Av. Los Olivos',1,1,1);
-insert into Departamento (RazonSocial,Cuenta) values ('taller','');
-
+insert into Departamento (RazonSocial,Cuenta) values ('Taller','')
 /*
+
 call sp_getCargos()
-call sp_GuardarCargo(-1,'Cajeros')
-call sp_GuardarCentroCosto(-1,'Produccion')
 call sp_getCentroCostos()
 call sp_getDepartamentos()
 call sp_getSedes()
-call sp_getSede(2)
+call sp_getSede(1)
+call sp_GuardarCargo(-1,'Cajeros')
+call sp_GuardarCentroCosto(-1,'Produccion')
+call sp_GuardarDepartamento(1,'Taller','')
 
-call sp_guardarSede(-1,'xx','qww',2,3,2)
+call sp_getDepartamentoss(1,8)
+call sp_getProvincias(1)
+call sp_getDistritos(1)
+
+
+call sp_GuardarSede(-1,'xx','qww',2,3,2)
 call sp_getEmpleadoLogin('99887766','123456')
 call sp_getEmpleado(1)
 
