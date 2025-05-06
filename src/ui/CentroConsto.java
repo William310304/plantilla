@@ -25,7 +25,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
 import controller.CentroConstoDAO;
-// import controller.CentroConstoDAO;
 
 public class CentroConsto extends JPanel {
     private static final long serialVersionUID = 1L;
@@ -204,6 +203,7 @@ public class CentroConsto extends JPanel {
 
         editar(true);
         getRegistros();
+        
     }
     protected void txtDetalle_focus(boolean bFocus) {
 		txtDetalle.setBackground( bFocus ? new Color(225, 245, 254) : Color.WHITE );
@@ -224,8 +224,10 @@ public class CentroConsto extends JPanel {
     }
   
 	protected void btnAgregar_actionPerformed() {
-        verRegistro(tblRegistros.getSelectedRow());
+        verRegistro(-1);
+        
 		editar(false);//false
+        // 
     }
 
     protected void btnEditar_actionPerformed() {
@@ -237,20 +239,24 @@ public class CentroConsto extends JPanel {
     }
 
     protected void btnGuardar_actionPerformed() {
+        int id = txtCodigo.getText() == null || txtCodigo.getText().trim().isEmpty()? -1: Integer.parseInt(txtCodigo.getText()) ;
+        guardarNuevoCentroCosto( id,txtDetalle.getText());
+        getRegistros();
+        verRegistro(tblRegistros.getSelectedRow());
     	editar(true);//true
     }
 
     protected void btnCancelar_actionPerformed() {
+        verRegistro(tblRegistros.getSelectedRow());
     	editar(true);//true
     }
     protected void txtBuscar_caretUpdate() {
 		tableRowSorter.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toLowerCase(), 5));
 	}
 
-    protected void editar( boolean bOnOff ) {
+    protected void editar( boolean bOnOff ) {//editar ->false
     	Planillas.bEdicion = !bOnOff;
-    	
-    	
+
         btnAgregar.setVisible( bOnOff );//bOnOff
         btnEditar.setVisible( bOnOff  );//bOnOff
         btnEliminar.setVisible( bOnOff );//bOnOff
@@ -259,7 +265,7 @@ public class CentroConsto extends JPanel {
 
         txtBuscar.setFocusable( bOnOff  );//bOnOff
         txtDetalle.setFocusable( !bOnOff );//!bOnOff
-        tblRegistros.setEnabled( bOnOff && bHayRegitro);
+        tblRegistros.setEnabled( bOnOff );
     }
     private void getRegistros() {
         
@@ -290,7 +296,7 @@ public class CentroConsto extends JPanel {
         
         
   	}
-      private void verRegistro(int index) {
+    private void verRegistro(int index) {
 		this.index = index;
 		boolean bLimpiar = index == -1;
 		
@@ -298,5 +304,10 @@ public class CentroConsto extends JPanel {
 		txtDetalle.setText( bLimpiar ? "" : tblRegistros.getValueAt(index, 1).toString() );
 	}
     
+    private void guardarNuevoCentroCosto(int id,String detalle) {
+        int _id = id > 0 ? id : -1;
+        centroConstoDAO.nuevoCentroCosto(_id, detalle.trim()); 
+        
+    }
 
 }

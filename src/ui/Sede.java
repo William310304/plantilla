@@ -10,6 +10,7 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
@@ -24,7 +25,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
-import controller.CargoDAO;
+// import controller.CargoDAO;
 import controller.SedeDAO;
 import model.Cargo;
 
@@ -32,9 +33,9 @@ public class Sede extends JPanel {
     private static final long serialVersionUID = 1L;
 
     JButton btnAgregar, btnEditar, btnEliminar, btnGuardar, btnCancelar;
-    JTextField txtBuscar, txtCodigo, txtDetalle;
-
-
+    JTextField txtBuscar, txtCodigo, txtDetalle, txtDireccion;
+    JComboBox<String> boxDepartamento, boxProvincia, boxDistrito, boxEstado;
+    String[] opciones = { "Selecciona"};
 
     JTable tblRegistros;
     TableRowSorter<DefaultTableModel> tableRowSorter;
@@ -135,27 +136,84 @@ public class Sede extends JPanel {
 		btnCancelar.setIconTextGap(10);
 		btnCancelar.setMargin( new Insets(2, 5, 2, 5) );
         pnlRegistro.add(btnCancelar);
-
+        
         JLabel lblCodigo = new JLabel("Codigo :");
-        lblCodigo.setBounds(50, 200, 100, 30);
+        lblCodigo.setBounds(50, 150, 100, 30);
         pnlRegistro.add(lblCodigo);
 
-        JLabel lblDetalle = new JLabel("Descripción :");
-        lblDetalle.setBounds(50, 250, 100, 30);
+        JLabel lblDetalle = new JLabel("Nombre Sede :");
+        lblDetalle.setBounds(50, 190, 100, 30);
         pnlRegistro.add(lblDetalle);
 
+        JLabel lblDireccion = new JLabel("Direccion :");
+        lblDireccion.setBounds(50, 230, 100, 30);
+        pnlRegistro.add(lblDireccion);
+
+        JLabel lblDepartamento = new JLabel("Departamento :");
+        lblDepartamento.setBounds(50, 270, 100, 30);
+        pnlRegistro.add(lblDepartamento);
+
+        JLabel lblProvincia = new JLabel("Provincia :");
+        lblProvincia.setBounds(50, 310, 100, 30);
+        pnlRegistro.add(lblProvincia);
+
+        JLabel lblDistrito = new JLabel("Distrito :");
+        lblDistrito.setBounds(50, 350, 100, 30);
+        pnlRegistro.add(lblDistrito);
+
+        JLabel lblEstado = new JLabel("Estado :");
+        lblEstado.setBounds(50, 390, 100, 30);
+        pnlRegistro.add(lblEstado);
+
         txtCodigo = new JTextField();
-        txtCodigo.setBounds(150, 200, 50, 30);
+        txtCodigo.setBounds(150, 150, 50, 30);
         txtCodigo.setFocusable(false);
         txtCodigo.setMargin(new Insets(5, 5, 5, 5));
         pnlRegistro.add(txtCodigo);
 
         txtDetalle = new JTextField();
-        txtDetalle.setBounds(150, 250, 200, 30);
+        txtDetalle.setBounds(150, 190, 200, 30);
         txtDetalle.setColumns(30);
         txtDetalle.setMargin(new Insets(5, 5, 5, 5));
         pnlRegistro.add(txtDetalle);
 
+        txtDireccion = new JTextField();
+        txtDireccion.setBounds(150, 230, 200, 30);
+        txtDireccion.setColumns(30);
+        txtDireccion.setMargin(new Insets(5, 5, 5, 5));
+        pnlRegistro.add(txtDireccion);
+
+        boxDepartamento = new JComboBox<>(opciones);
+        boxDepartamento.setBorder( new LineBorder( new Color(224, 224, 224) ));
+        boxDepartamento.setBounds(150, 270, 240, 30);
+        boxDepartamento.setFocusable(false);
+        boxDepartamento.setFont(new Font("Tahoma", Font.PLAIN, 12));
+        boxDepartamento.setSelectedIndex(0);
+        pnlRegistro.add(boxDepartamento);
+
+        boxProvincia = new JComboBox<>(opciones);
+        boxProvincia.setBorder( new LineBorder( new Color(224, 224, 224) ));
+        boxProvincia.setBounds(150, 310, 240, 30);
+        boxProvincia.setFocusable(false);
+        boxProvincia.setFont(new Font("Tahoma", Font.PLAIN, 12));
+        boxProvincia.setSelectedIndex(0);
+        pnlRegistro.add(boxProvincia);
+
+        boxDistrito = new JComboBox<>(opciones);
+        boxDistrito.setBorder( new LineBorder( new Color(224, 224, 224) ));
+        boxDistrito.setBounds(150, 350, 240, 30);
+        boxDistrito.setFocusable(false);
+        boxDistrito.setFont(new Font("Tahoma", Font.PLAIN, 12));
+        boxDistrito.setSelectedIndex(0);
+        pnlRegistro.add(boxDistrito);
+
+        boxEstado = new JComboBox<>(opciones);
+        boxEstado.setBorder( new LineBorder( new Color(224, 224, 224) ));
+        boxEstado.setBounds(150, 390, 240, 30);
+        boxEstado.setFocusable(false);
+        boxEstado.setFont(new Font("Tahoma", Font.PLAIN, 12));
+        boxEstado.setSelectedIndex(0);
+        pnlRegistro.add(boxEstado);
 
         btnAgregar.addActionListener( e -> btnAgregar_actionPerformed() );
         btnEditar.addActionListener( e -> btnEditar_actionPerformed() );

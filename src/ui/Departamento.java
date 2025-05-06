@@ -10,6 +10,7 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
@@ -252,9 +253,9 @@ public class Departamento extends JPanel {
                 longitud >= txt.getColumns())
             e.consume();
     }
-  
+
 	protected void btnAgregar_actionPerformed() {
-        verRegistro(tblRegistros.getSelectedRow());
+        verRegistro(-1);
 		editar(false);//false
     }
 
@@ -267,9 +268,14 @@ public class Departamento extends JPanel {
     }
 
     protected void btnGuardar_actionPerformed() {
+        int id = txtCodigo.getText() == null || txtCodigo.getText().isEmpty() ? 0 : Integer.parseInt(txtCodigo.getText());
+        guardarNuevoDepartamento(id, txtDetalle.getText(), txtCuenta.getText());
+        getRegistros();
+        verRegistro(tblRegistros.getSelectedRow());
     	editar(true);//true
     }
 
+    
     protected void btnCancelar_actionPerformed() {
     	editar(true);//true
     }
@@ -289,8 +295,8 @@ public class Departamento extends JPanel {
 
         txtBuscar.setFocusable( bOnOff  );//bOnOff
         txtDetalle.setFocusable( !bOnOff );//!bOnOff
+        tblRegistros.setEnabled( bOnOff );
         txtCuenta.setFocusable( !bOnOff);
-        tblRegistros.setEnabled( bOnOff && bHayRegitro);
     }
     private void getRegistros() {
         
@@ -329,6 +335,10 @@ public class Departamento extends JPanel {
 		txtDetalle.setText( bLimpiar ? "" : tblRegistros.getValueAt(index, 1).toString() );
         txtCuenta.setText( bLimpiar ? "" : tblRegistros.getValueAt(index, 2).toString() );
 	}
+    private void guardarNuevoDepartamento(int id, String detalle, String cuenta) {
+        int _id = id > 0 ? id : -1;
+        departamentoDAO.nuevoDepartamento(_id, detalle.trim(), cuenta.trim());
     
+    }
 
 }

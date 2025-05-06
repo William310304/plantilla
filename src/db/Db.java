@@ -13,7 +13,7 @@ public class Db {
 	Connection cn = null;
 	PreparedStatement ps = null;
 	String _sql = null;
-	String _ip="localHost",_port="3306",_USER="root",_PASSWORD="",_DB=null,_SQL=null;
+	String _ip="localHost",_port="3306",_USER="root",_PASSWORD="1234",_DB=null,_SQL=null;
 	
 	
     public Db(String db) {

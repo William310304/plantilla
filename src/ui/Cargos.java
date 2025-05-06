@@ -3,6 +3,7 @@ package ui;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Insets;
+// import java.awt.Label;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
@@ -224,11 +225,12 @@ public class Cargos extends JPanel {
     }
   
 	protected void btnAgregar_actionPerformed() {
-        verRegistro(tblRegistros.getSelectedRow());
+        verRegistro(-1);
 		editar(false);//false
     }
 
     protected void btnEditar_actionPerformed() {
+        
     	editar(false);//false
     }
 
@@ -237,10 +239,18 @@ public class Cargos extends JPanel {
     }
 
     protected void btnGuardar_actionPerformed() {
+
+        int id = txtCodigo.getText() == null || txtCodigo.getText().trim().isEmpty()? -1: Integer.parseInt(txtCodigo.getText()) ;
+        guardarNuevoCargo( id,txtDetalle.getText());
+        getRegistros();
+        verRegistro(tblRegistros.getSelectedRow());
     	editar(true);//true
     }
 
+   
     protected void btnCancelar_actionPerformed() {
+        verRegistro(tblRegistros.getSelectedRow());
+        
     	editar(true);//true
     }
     protected void txtBuscar_caretUpdate() {
@@ -249,8 +259,7 @@ public class Cargos extends JPanel {
 
     protected void editar( boolean bOnOff ) {
     	Planillas.bEdicion = !bOnOff;
-    	
-    	
+
         btnAgregar.setVisible( bOnOff );//bOnOff
         btnEditar.setVisible( bOnOff  );//bOnOff
         btnEliminar.setVisible( bOnOff );//bOnOff
@@ -259,7 +268,7 @@ public class Cargos extends JPanel {
 
         txtBuscar.setFocusable( bOnOff  );//bOnOff
         txtDetalle.setFocusable( !bOnOff );//!bOnOff
-        tblRegistros.setEnabled( bOnOff && bHayRegitro);
+        tblRegistros.setEnabled( bOnOff );
     }
     private void getRegistros() {
         
@@ -297,6 +306,11 @@ public class Cargos extends JPanel {
 		txtCodigo.setText( bLimpiar ? "" : tblRegistros.getValueAt(index, 0).toString() );
 		txtDetalle.setText( bLimpiar ? "" : tblRegistros.getValueAt(index, 1).toString() );
 	}
+    private void guardarNuevoCargo(int id,String detalle) {
+       int _id = id > 0 ? id : -1;
+       cargoDAO.nuevoCargo(_id, detalle.trim()); 
+
+    }
     
 
 }
